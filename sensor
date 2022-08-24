@@ -1,0 +1,64 @@
+from re import T
+#\from mysqldb import *
+
+
+def bd_connection():
+    try:
+        host = '192.168.1.101'
+        user = 'masknull'
+        passwd = ''
+        db = 'zabbix'
+    except:
+        print('Error - pass?') 
+    cur = db.cursor()
+
+    return  cur   
+
+def lookup_a_table(cur, tablename):
+    cur.execute('SELECT * FROM'+tablename)
+    table_rows = cur.fetchall()
+    
+    print(f"Количество строк в таблице {tablename}: t{table_rows}")
+
+    cur.execute('SELECT * FROM'+tablename)
+    table_data = cur.fetchall()
+
+    return table_data
+
+def start_data():
+    with open('test.txt', 'r') as f:
+        #rows = ({k: v for k,v in i.split()} for i in f.read().splitlines())
+        dic = {}
+        rows = f.read().splitlines()
+        try:
+            for row in rows:
+                k,v = row.split(' ')
+                dic[k] = float(v)
+        except ValueError: 
+            print('Exception!')
+    return dic
+
+def output_lvl_0(k, v):
+    with open('test_out_lvl_0', 'w') as f:
+        f.write(f'{k}: {v} - обрати на меня внимание')
+        
+     
+
+def prediction():
+    rows = start_data()
+    avg_mydic = sum(rows.values())/len(rows.values())
+    
+
+    for k,v in rows.items():
+        if v > avg_mydic:  
+            output_lvl_0(k,v) 
+            print('')
+    result = rows
+    return result
+
+
+#db_connect = bd_connection()
+#table = 'zabbix'
+#data = lookup_a_table(db_connect,table)
+analogue = prediction()
+print(analogue)
